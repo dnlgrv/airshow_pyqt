@@ -1,8 +1,8 @@
 import math
 import time
 
-from PyQt5.QtCore import Qt, QRect, QTimer
-from PyQt5.QtGui import QColor, QPainter
+from PyQt5.QtCore import Qt, QPoint, QRect, QTimer
+from PyQt5.QtGui import QColor, QPainter, QPen
 from PyQt5.QtWidgets import QWidget
 
 class AttitudeWidget(QWidget):
@@ -26,10 +26,10 @@ class AttitudeWidget(QWidget):
         self.timer.start()
 
     def paintEvent(self, event):
-        azpix = self.height() / 60.
-
         qp = QPainter()
         qp.begin(self)
+
+        azpix = self.height() / 60.
 
         qp.translate(self.width() / 2, (self.height() / 2) + (azpix * self.azimuth))
         qp.rotate(self.angle)
@@ -40,6 +40,21 @@ class AttitudeWidget(QWidget):
         qp.setBrush(QColor(170, 90, 85))
         qp.drawRect(ground)
 
+        l1 = QPoint(-(self.width() / 10), 0)
+        r1 = QPoint((self.width() / 10), 0)
+
+        qp.setBrush(Qt.black)
+        pen = QPen()
+        pen.setColor(Qt.black)
+        pen.setWidth(self.height() / 200)
+        pen.setStyle(Qt.SolidLine)
+        qp.setPen(pen)
+
+        qp.drawLine(l1.x(), l1.y() + (azpix * 10), r1.x(), r1.y() + (azpix * 10))
+        qp.drawLine(l1.x(), l1.y() - (azpix * 10), r1.x(), r1.y() - (azpix * 10))
+        qp.drawLine(l1.x(), l1.y() + (azpix * 20), r1.x(), r1.y() + (azpix * 20))
+        qp.drawLine(l1.x(), l1.y() - (azpix * 20), r1.x(), r1.y() - (azpix * 20))
+
         qp.end()
 
     def _timeout(self):
@@ -47,6 +62,6 @@ class AttitudeWidget(QWidget):
         time_elapsed = time_now - self.start_time
 
         self.angle = math.sin(time_elapsed) * 40
-        self.azimuth = math.sin(time_elapsed) * 0
+        self.azimuth = math.sin(time_elapsed) * 20
 
         self.update()
