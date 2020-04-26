@@ -25,7 +25,7 @@ class AHRS(QObject):
         time_elapsed = time_now - self.start_time
 
         self.heading = (math.sin(time_elapsed) * 180) % 359
-        # self.pitch = math.sin(time_elapsed) * 30
+        # self.pitch = math.cos(time_elapsed) * 10
         self.roll = math.sin(time_elapsed) * 20
 
         self.changed.emit(self.heading, self.pitch, self.roll)
