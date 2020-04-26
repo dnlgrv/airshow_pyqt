@@ -18,12 +18,12 @@ class AttitudeWidget(QWidget):
         p.setColor(self.backgroundRole(), QColor(0, 130, 235))
         self.setPalette(p)
 
-        self.start_time = time.time()
+        # self.start_time = time.time()
 
-        self.timer = QTimer()
-        self.timer.setInterval(10)
-        self.timer.timeout.connect(self._timeout)
-        self.timer.start()
+        # self.timer = QTimer()
+        # self.timer.setInterval(10)
+        # self.timer.timeout.connect(self._timeout)
+        # self.timer.start()
 
     def paintEvent(self, event):
         qp = QPainter()
@@ -32,7 +32,7 @@ class AttitudeWidget(QWidget):
         azpix = self.height() / 60.
 
         qp.translate(self.width() / 2, (self.height() / 2) + (azpix * self.azimuth))
-        qp.rotate(self.angle)
+        qp.rotate(-self.angle)
 
         ground = QRect(-2 * (self.width() / 2), 0, 2 * self.width(), 2 * self.height())
 
