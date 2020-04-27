@@ -13,29 +13,15 @@ class Aircraft(QWidget):
         center_x = self.width() / 2
         center_y = self.height() / 2
 
-        nose = QRect(center_x - 5, 0, 10, 10)
+        wing_width = self.width() / 6
 
-        left = [
-                QPoint(0, 0),
-                QPoint(center_x - 15, 0),
-                QPoint(center_x - 15, self.height()),
-                QPoint(center_x - 20, self.height()),
-                QPoint(center_x - 20, 5),
-                QPoint(0, 5)
-            ]
-
-        right = [
-                QPoint(self.width(), 0),
-                QPoint(center_x + 15, 0),
-                QPoint(center_x + 15, self.height()),
-                QPoint(center_x + 20, self.height()),
-                QPoint(center_x + 20, 5),
-                QPoint(self.width(), 5)
-            ]
+        nose = QRect(center_x - 5, center_y - 5, 10, 10)
+        left = QRect(center_x - 15 - wing_width, center_y - 5, wing_width, 10)
+        right = QRect(center_x + 15, center_y - 5, wing_width, 10)
 
         qp.setBrush(Qt.yellow)
         qp.drawRect(nose)
-        qp.drawPolygon(QPolygon(left))
-        qp.drawPolygon(QPolygon(right))
+        qp.drawRect(left)
+        qp.drawRect(right)
 
         qp.end()
