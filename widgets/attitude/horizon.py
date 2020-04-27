@@ -31,8 +31,7 @@ class Horizon(QWidget):
 
         qp.end()
 
-    def setAngle(self, angle):
+    def setAhrs(self, _heading, azimuth, angle):
         self.angle = angle
-
-    def setAzimuth(self, azimuth):
         self.azimuth = azimuth
+        self.update()

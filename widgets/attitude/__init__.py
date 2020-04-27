@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QGridLayout, QWidget
 
 from widgets.attitude.aircraft import Aircraft
 from widgets.attitude.horizon import Horizon
+from widgets.attitude.roll_dial import RollDial
 
 class AttitudeWidget(QWidget):
     def __init__(self, ahrs, parent=None):
@@ -13,6 +14,7 @@ class AttitudeWidget(QWidget):
 
         self.horizon = Horizon(self)
         self.aircraft = Aircraft(self)
+        self.roll_dial = RollDial(self)
 
         layout = QGridLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -28,9 +30,9 @@ class AttitudeWidget(QWidget):
 
         layout.addWidget(self.horizon, 0, 0, 5, 3, Qt.Alignment())
         layout.addWidget(self.aircraft, 2, 1, 1, 1, Qt.Alignment())
+        layout.addWidget(self.roll_dial, 1, 1, 3, 1, Qt.Alignment())
 
     @Slot(float, float, float)
     def on_ahrs_changed(self, heading, pitch, roll):
-        self.horizon.setAngle(roll)
-        self.horizon.setAzimuth(pitch)
-        self.horizon.update()
+        self.horizon.setAhrs(heading, pitch, roll)
+        self.roll_dial.setAhrs(heading, pitch, roll)
