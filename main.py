@@ -45,7 +45,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
 
     airshow = Airshow()
-    airshow.setFixedSize(800, 480)
+    airshow.setFixedSize(720, 720)
     airshow.show()
 
     sys.exit(app.exec_())
