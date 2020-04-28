@@ -14,7 +14,6 @@ class RollDial(QWidget):
     def paintEvent(self, event):
         qp = QPainter()
         qp.begin(self)
-        qp.setClipping(False)
 
         qp.translate(self.width() / 2, (self.height() / 2))
         qp.rotate(-self.angle)

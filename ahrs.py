@@ -8,6 +8,7 @@ class AHRS(QObject):
     heading = 0
     pitch = 0
     roll = 0
+    slip = 0
 
     def __init__(self):
         super(AHRS, self).__init__()
@@ -27,5 +28,7 @@ class AHRS(QObject):
         self.heading = (math.sin(time_elapsed) * 180) % 359
         self.pitch = math.cos(time_elapsed) * 10
         self.roll = math.sin(time_elapsed) * 20
+
+        self.slip = math.cos(time_elapsed) * 1
 
         self.changed.emit()

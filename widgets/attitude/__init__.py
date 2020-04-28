@@ -5,6 +5,7 @@ from widgets.attitude.aircraft import Aircraft
 from widgets.attitude.horizon import Horizon
 from widgets.attitude.pitch_markers import PitchMarkers
 from widgets.attitude.roll_dial import RollDial
+from widgets.attitude.slip_indicator import SlipIndicator
 
 class AttitudeWidget(QWidget):
     def __init__(self, ahrs, settings, parent=None):
@@ -20,6 +21,7 @@ class AttitudeWidget(QWidget):
         self.aircraft = Aircraft(self)
         self.pitch_markers = PitchMarkers(self)
         self.roll_dial = RollDial(self)
+        self.slip_indicator = SlipIndicator(self)
 
         layout = QGridLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -37,6 +39,7 @@ class AttitudeWidget(QWidget):
         layout.addWidget(self.pitch_markers, 2, 1, 1, 1, Qt.Alignment())
         layout.addWidget(self.aircraft, 2, 1, 1, 1, Qt.Alignment())
         layout.addWidget(self.roll_dial, 0, 1, 5, 1, Qt.Alignment())
+        layout.addWidget(self.slip_indicator, 3, 1, 2, 1, Qt.Alignment())
 
     @Slot()
     def on_ahrs_changed(self):
@@ -47,6 +50,8 @@ class AttitudeWidget(QWidget):
         self.horizon.setAhrs(heading, pitch, roll)
         self.pitch_markers.setAhrs(heading, pitch, roll)
         self.roll_dial.setAhrs(heading, pitch, roll)
+
+        self.slip_indicator.setAhrs(self.ahrs.slip)
 
     @Slot()
     def on_settings_changed(self):
