@@ -4,13 +4,13 @@ from PyQt5.QtGui import QPainter, QPen
 
 markers = list(range(-90, 95, 5))
 
-class PitchMarkers(QWidget):
+class PitchScale(QWidget):
     angle = 0
     azimuth = 0
     vertical_offset = 0
 
     def __init__(self,  parent=None):
-        super(PitchMarkers, self).__init__(parent)
+        super(PitchScale, self).__init__(parent)
 
     def paintEvent(self, event):
         qp = QPainter()

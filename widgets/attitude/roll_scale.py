@@ -5,11 +5,11 @@ from PyQt5.QtGui import QPainter, QPen, QPolygon
 
 notches = [-60, -45, -30, -20, -10, 0, 10, 20, 30, 45, 60]
 
-class RollDial(QWidget):
+class RollScale(QWidget):
     angle = 0
 
     def __init__(self,  parent=None):
-        super(RollDial, self).__init__(parent)
+        super(RollScale, self).__init__(parent)
 
     def paintEvent(self, event):
         qp = QPainter()

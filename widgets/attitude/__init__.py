@@ -3,8 +3,8 @@ from PyQt5.QtWidgets import QGridLayout, QWidget
 
 from widgets.attitude.aircraft import Aircraft
 from widgets.attitude.horizon import Horizon
-from widgets.attitude.pitch_markers import PitchMarkers
-from widgets.attitude.roll_dial import RollDial
+from widgets.attitude.pitch_scale import PitchScale
+from widgets.attitude.roll_scale import RollScale
 from widgets.attitude.slip_indicator import SlipIndicator
 
 class AttitudeWidget(QWidget):
@@ -19,8 +19,8 @@ class AttitudeWidget(QWidget):
 
         self.horizon = Horizon(self)
         self.aircraft = Aircraft(self)
-        self.pitch_markers = PitchMarkers(self)
-        self.roll_dial = RollDial(self)
+        self.pitch_scale = PitchScale(self)
+        self.roll_scale = RollScale(self)
         self.slip_indicator = SlipIndicator(self)
 
         layout = QGridLayout(self)
@@ -36,9 +36,9 @@ class AttitudeWidget(QWidget):
         layout.setRowStretch(4, 1)
 
         layout.addWidget(self.horizon, 0, 0, 5, 3, Qt.Alignment())
-        layout.addWidget(self.pitch_markers, 2, 1, 1, 1, Qt.Alignment())
+        layout.addWidget(self.pitch_scale, 2, 1, 1, 1, Qt.Alignment())
         layout.addWidget(self.aircraft, 2, 1, 1, 1, Qt.Alignment())
-        layout.addWidget(self.roll_dial, 0, 1, 5, 1, Qt.Alignment())
+        layout.addWidget(self.roll_scale, 0, 1, 5, 1, Qt.Alignment())
         layout.addWidget(self.slip_indicator, 3, 1, 2, 1, Qt.Alignment())
 
     @Slot()
@@ -48,12 +48,12 @@ class AttitudeWidget(QWidget):
         roll = self.ahrs.roll
 
         self.horizon.setAhrs(heading, pitch, roll)
-        self.pitch_markers.setAhrs(heading, pitch, roll)
-        self.roll_dial.setAhrs(heading, pitch, roll)
+        self.pitch_scale.setAhrs(heading, pitch, roll)
+        self.roll_scale.setAhrs(heading, pitch, roll)
 
         self.slip_indicator.setAhrs(self.ahrs.slip)
 
     @Slot()
     def on_settings_changed(self):
         self.horizon.setVerticalOffset(self.settings.vertical_offset)
-        self.pitch_markers.setVerticalOffset(self.settings.vertical_offset)
+        self.pitch_scale.setVerticalOffset(self.settings.vertical_offset)
