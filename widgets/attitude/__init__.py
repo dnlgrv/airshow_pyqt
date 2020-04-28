@@ -33,7 +33,7 @@ class AttitudeWidget(QWidget):
         layout.addWidget(self.horizon, 0, 0, 5, 3, Qt.Alignment())
         layout.addWidget(self.pitch_markers, 2, 1, 1, 1, Qt.Alignment())
         layout.addWidget(self.aircraft, 2, 1, 1, 1, Qt.Alignment())
-        layout.addWidget(self.roll_dial, 1, 1, 3, 1, Qt.Alignment())
+        layout.addWidget(self.roll_dial, 0, 1, 5, 1, Qt.Alignment())
 
     @Slot(float, float, float)
     def on_ahrs_changed(self, heading, pitch, roll):

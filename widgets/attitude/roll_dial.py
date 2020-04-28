@@ -20,20 +20,21 @@ class RollDial(QWidget):
         qp.rotate(-self.angle)
         qp.translate(-(self.width() / 2), -((self.height() / 2)))
 
-        y = (self.rect().height() - self.rect().width()) / 2
-        inner_rect = QRect(self.rect().x(), y, self.rect().width(), self.rect().width())
+        inner_rect = QRect(self.rect().x(), 20, self.rect().width(), self.rect().width())
 
+        # qp.setPen(Qt.red)
         # qp.drawRect(self.rect())
+        # qp.setPen(Qt.green)
         # qp.drawRect(inner_rect)
         # qp.drawEllipse(inner_rect)
 
-        origin = self.rect().center()
+        origin = inner_rect.center()
         j = origin.x()
         k = origin.y()
         r = inner_rect.width() / 2
 
-        startAngle = 30 * 16
-        spanAngle = 120 * 16
+        startAngle = 31 * 16
+        spanAngle = 119 * 16
 
         pen = QPen()
         pen.setColor(Qt.white)
