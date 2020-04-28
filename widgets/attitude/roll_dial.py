@@ -45,12 +45,16 @@ class RollDial(QWidget):
         for notch in notches:
             angle = 270 + notch
 
-            length = 20 if notch in [0, -30, 30, -60, 60] else 10
-
-            x1 = r * math.cos(math.radians(angle)) + j
-            y1 = r * math.sin(math.radians(angle)) + k
-            x2 = (r - length) * math.cos(math.radians(angle)) + j
-            y2 = (r - length) * math.sin(math.radians(angle)) + k
+            if notch in [0, -30, 30, -60, 60]:
+                x1 = r * math.cos(math.radians(angle)) + j
+                y1 = r * math.sin(math.radians(angle)) + k
+                x2 = (r - 20) * math.cos(math.radians(angle)) + j
+                y2 = (r - 20) * math.sin(math.radians(angle)) + k
+            else:
+                x1 = (r - 10) * math.cos(math.radians(angle)) + j
+                y1 = (r - 10) * math.sin(math.radians(angle)) + k
+                x2 = (r - 20) * math.cos(math.radians(angle)) + j
+                y2 = (r - 20) * math.sin(math.radians(angle)) + k
 
             qp.drawLine(x1, y1, x2, y2)
 
