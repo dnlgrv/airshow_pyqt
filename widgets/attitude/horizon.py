@@ -14,10 +14,16 @@ class Horizon(QWidget):
         qp = QPainter()
         qp.begin(self)
 
+        qp.setPen(Qt.black)
+        qp.drawRect(self.rect())
+        qp.drawRect(self.rect().adjusted(50, 50, -50, -50))
+
         azpix = self.parent().geometry().height() / 60.
 
-        qp.translate(self.width() / 2, (self.height() / 2) + (azpix * self.azimuth) + (azpix * self.vertical_offset))
+        qp.translate(self.rect().center())
         qp.rotate(-self.angle)
+        qp.translate(-self.rect().center())
+        qp.translate(0, self.rect().center().y() + (azpix * self.azimuth) + (azpix * self.vertical_offset))
 
         ground = QRect(-3 * (self.width() / 2), 0, 3 * self.width(), 3 * self.height())
         sky = QRect(-3 * (self.width() / 2), -3 * (self.height() / 2), 3 * self.width(), 3 * (self.height() / 2))
@@ -29,6 +35,11 @@ class Horizon(QWidget):
 
         qp.setBrush(QColor(0, 130, 235))
         qp.drawRect(sky)
+
+        # qp.setPen(Qt.black)
+        # qp.drawRect(self.rect())
+        # qp.drawRect(self.rect().adjusted(50, 50, -50, -50))
+        # qp.drawLine(self.rect().center().x(), 0, self.rect().center().x(), self.height())
 
         qp.end()
 

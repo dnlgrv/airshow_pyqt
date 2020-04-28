@@ -18,8 +18,10 @@ class PitchMarkers(QWidget):
 
         azpix = self.parent().geometry().height() / 60.
 
-        qp.translate(self.width() / 2, (self.height() / 2) + (azpix * self.azimuth) + (azpix * self.vertical_offset))
+        qp.translate(self.rect().center())
         qp.rotate(-self.angle)
+        qp.translate(-self.rect().center())
+        qp.translate(self.rect().center().x(), self.rect().center().y() + (azpix * self.azimuth) + (azpix * self.vertical_offset))
 
         qp.setPen(Qt.white)
 
