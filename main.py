@@ -12,32 +12,38 @@
 # bno055._write_register(0x42, 0b00000110)
 # bno055.mode = NDOF_MODE
 
-from PyQt5 import QtCore
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QStackedLayout, QWidget
 
 from widgets.attitude import AttitudeWidget
 
 import ahrs
+import settings
 
 class Airshow(QWidget):
     def __init__(self, parent=None):
         super(Airshow, self).__init__(parent)
 
         self.setWindowTitle('Airshow')
+        self.settings = settings.Settings()
 
         self.ahrs = ahrs.AHRS()
         self.ahrs.listen()
 
-        self.attitudeWidget = AttitudeWidget(self.ahrs)
+        self.attitudeWidget = AttitudeWidget(self.ahrs, self.settings)
 
         layout = QStackedLayout()
         layout.addWidget(self.attitudeWidget)
 
         self.setLayout(layout)
 
-    def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Escape:
+    def keyReleaseEvent(self, event):
+        if event.key() == Qt.Key_Escape:
             self.close()
+        elif event.key() == Qt.Key_Up:
+            self.settings.inrease_vertical_offset()
+        elif event.key() == Qt.Key_Down:
+            self.settings.decrease_vertical_offset()
 
 if __name__ == '__main__':
     import sys

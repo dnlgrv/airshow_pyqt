@@ -3,7 +3,7 @@ import time
 from PyQt5.QtCore import QObject, QTimer, pyqtSignal as Signal
 
 class AHRS(QObject):
-    changed = Signal(float, float, float)
+    changed = Signal()
 
     heading = 0
     pitch = 0
@@ -28,4 +28,4 @@ class AHRS(QObject):
         self.pitch = math.cos(time_elapsed) * 10
         self.roll = math.sin(time_elapsed) * 20
 
-        self.changed.emit(self.heading, self.pitch, self.roll)
+        self.changed.emit()

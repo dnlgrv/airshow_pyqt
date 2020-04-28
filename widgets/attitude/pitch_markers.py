@@ -7,6 +7,7 @@ markers = list(range(-90, 95, 5))
 class PitchMarkers(QWidget):
     angle = 0
     azimuth = 0
+    vertical_offset = 0
 
     def __init__(self,  parent=None):
         super(PitchMarkers, self).__init__(parent)
@@ -17,7 +18,7 @@ class PitchMarkers(QWidget):
 
         azpix = self.parent().geometry().height() / 60.
 
-        qp.translate(self.width() / 2, (self.height() / 2) + (azpix * self.azimuth))
+        qp.translate(self.width() / 2, (self.height() / 2) + (azpix * self.azimuth) + (azpix * self.vertical_offset))
         qp.rotate(-self.angle)
 
         qp.setPen(Qt.white)
@@ -43,4 +44,8 @@ class PitchMarkers(QWidget):
     def setAhrs(self, _heading, azimuth, angle):
         self.angle = angle
         self.azimuth = azimuth
+        self.update()
+
+    def setVerticalOffset(self, vertical_offset):
+        self.vertical_offset = vertical_offset
         self.update()

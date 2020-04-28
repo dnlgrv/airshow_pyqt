@@ -7,11 +7,14 @@ from widgets.attitude.pitch_markers import PitchMarkers
 from widgets.attitude.roll_dial import RollDial
 
 class AttitudeWidget(QWidget):
-    def __init__(self, ahrs, parent=None):
+    def __init__(self, ahrs, settings, parent=None):
         super(AttitudeWidget, self).__init__(parent)
 
         self.ahrs = ahrs
-        self.ahrs.changed.connect(self.on_ahrs_changed)
+        ahrs.changed.connect(self.on_ahrs_changed)
+
+        self.settings = settings
+        settings.changed.connect(self.on_settings_changed)
 
         self.horizon = Horizon(self)
         self.aircraft = Aircraft(self)
@@ -35,8 +38,17 @@ class AttitudeWidget(QWidget):
         layout.addWidget(self.aircraft, 2, 1, 1, 1, Qt.Alignment())
         layout.addWidget(self.roll_dial, 0, 1, 5, 1, Qt.Alignment())
 
-    @Slot(float, float, float)
-    def on_ahrs_changed(self, heading, pitch, roll):
+    @Slot()
+    def on_ahrs_changed(self):
+        heading = self.ahrs.heading
+        pitch = self.ahrs.pitch
+        roll = self.ahrs.roll
+
         self.horizon.setAhrs(heading, pitch, roll)
         self.pitch_markers.setAhrs(heading, pitch, roll)
         self.roll_dial.setAhrs(heading, pitch, roll)
+
+    @Slot()
+    def on_settings_changed(self):
+        self.horizon.setVerticalOffset(self.settings.vertical_offset)
+        self.pitch_markers.setVerticalOffset(self.settings.vertical_offset)
