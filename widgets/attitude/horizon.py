@@ -13,7 +13,7 @@ class Horizon(QWidget):
         qp = QPainter()
         qp.begin(self)
 
-        azpix = self.height() / 60.
+        azpix = self.parent().geometry().height() / 60.
 
         qp.translate(self.width() / 2, (self.height() / 2) + (azpix * self.azimuth))
         qp.rotate(-self.angle)

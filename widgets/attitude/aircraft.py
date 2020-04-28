@@ -10,12 +10,15 @@ class Aircraft(QWidget):
         qp = QPainter()
         qp.begin(self)
 
+        rect = self.rect()
+
         center_x = self.width() / 2
         center_y = self.height() / 2
 
+        nose_width = 10
         wing_width = self.width() / 6
 
-        nose = QRect(center_x - 5, center_y - 5, 10, 10)
+        nose = QRect(rect.center().x() - nose_width / 2, rect.center().y() - nose_width / 2, nose_width, nose_width)
         left = QRect(center_x - 15 - wing_width, center_y - 5, wing_width, 10)
         right = QRect(center_x + 15, center_y - 5, wing_width, 10)
 

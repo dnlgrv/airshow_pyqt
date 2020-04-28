@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QGridLayout, QWidget
 
 from widgets.attitude.aircraft import Aircraft
 from widgets.attitude.horizon import Horizon
+from widgets.attitude.pitch_markers import PitchMarkers
 from widgets.attitude.roll_dial import RollDial
 
 class AttitudeWidget(QWidget):
@@ -14,6 +15,7 @@ class AttitudeWidget(QWidget):
 
         self.horizon = Horizon(self)
         self.aircraft = Aircraft(self)
+        self.pitch_markers = PitchMarkers(self)
         self.roll_dial = RollDial(self)
 
         layout = QGridLayout(self)
@@ -29,10 +31,12 @@ class AttitudeWidget(QWidget):
         layout.setRowStretch(4, 1)
 
         layout.addWidget(self.horizon, 0, 0, 5, 3, Qt.Alignment())
+        layout.addWidget(self.pitch_markers, 2, 1, 1, 1, Qt.Alignment())
         layout.addWidget(self.aircraft, 2, 1, 1, 1, Qt.Alignment())
         layout.addWidget(self.roll_dial, 1, 1, 3, 1, Qt.Alignment())
 
     @Slot(float, float, float)
     def on_ahrs_changed(self, heading, pitch, roll):
         self.horizon.setAhrs(heading, pitch, roll)
+        self.pitch_markers.setAhrs(heading, pitch, roll)
         self.roll_dial.setAhrs(heading, pitch, roll)
