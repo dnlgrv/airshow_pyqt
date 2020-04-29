@@ -2,6 +2,7 @@ from PyQt5.QtCore import Qt, pyqtSlot as Slot
 from PyQt5.QtWidgets import QGridLayout, QWidget
 
 from widgets.attitude.aircraft import Aircraft
+from widgets.attitude.altitude import Altitude
 from widgets.attitude.horizon import Horizon
 from widgets.attitude.pitch_scale import PitchScale
 from widgets.attitude.roll_scale import RollScale
@@ -18,10 +19,13 @@ class AttitudeWidget(QWidget):
         settings.changed.connect(self.on_settings_changed)
 
         self.horizon = Horizon(self)
-        self.aircraft = Aircraft(self)
+
+        self.altitude = Altitude(self.settings.qnh, self)
         self.pitch_scale = PitchScale(self)
         self.roll_scale = RollScale(self)
         self.slip_indicator = SlipIndicator(self)
+
+        self.aircraft = Aircraft(self)
 
         layout = QGridLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -40,6 +44,7 @@ class AttitudeWidget(QWidget):
         layout.addWidget(self.aircraft, 2, 1, 1, 1, Qt.Alignment())
         layout.addWidget(self.roll_scale, 0, 1, 5, 1, Qt.Alignment())
         layout.addWidget(self.slip_indicator, 3, 1, 2, 1, Qt.Alignment())
+        layout.addWidget(self.altitude, 0, 2, 5, 1, Qt.Alignment())
 
     @Slot()
     def on_ahrs_changed(self):
@@ -57,3 +62,5 @@ class AttitudeWidget(QWidget):
     def on_settings_changed(self):
         self.horizon.setVerticalOffset(self.settings.vertical_offset)
         self.pitch_scale.setVerticalOffset(self.settings.vertical_offset)
+
+        self.altitude.setQNH(self.settings.qnh)

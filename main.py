@@ -41,9 +41,11 @@ class Airshow(QWidget):
         if event.key() == Qt.Key_Escape:
             self.close()
         elif event.key() == Qt.Key_Up:
-            self.settings.inrease_vertical_offset()
+            self.settings.increase_qnh()
+            # self.settings.inrease_vertical_offset()
         elif event.key() == Qt.Key_Down:
-            self.settings.decrease_vertical_offset()
+            self.settings.decrease_qnh()
+            # self.settings.decrease_vertical_offset()
 
 if __name__ == '__main__':
     import sys
