@@ -10,8 +10,20 @@ class AHRS(QObject):
     roll = 0
     slip = 0
 
+    simulated = False
+
     def __init__(self):
         super(AHRS, self).__init__()
+
+        try:
+            import board
+            import busio
+            from adafruit_bmp280 import Adafruit_BMP280_I2C
+            from adafruit_bno055 import BNO055_I2C, CONFIG_MODE, NDOF_MODE
+            i2c = busio.I2C(board.SCL, board.SDA)
+            self.axis_sensor = BNO055_I2C(i2c)
+        except NotImplementedError:
+            self.simulated = True
 
     def listen(self):
         self.start_time = time.time()
@@ -22,13 +34,20 @@ class AHRS(QObject):
         self.timer.start()
 
     def _timeout(self):
-        time_now = time.time()
-        time_elapsed = time_now - self.start_time
+        if self.simulated:
+            time_now = time.time()
+            time_elapsed = time_now - self.start_time
 
-        self.heading = (math.sin(time_elapsed) * 180) % 359
-        self.pitch = math.cos(time_elapsed) * 10
-        self.roll = math.sin(time_elapsed) * 20
+            self.heading = (math.sin(time_elapsed) * 180) % 359
+            self.pitch = math.cos(time_elapsed) * 10
+            self.roll = math.sin(time_elapsed) * 20
 
-        self.slip = math.cos(time_elapsed) * 1
+            self.slip = math.cos(time_elapsed) * 1
+        else:
+            heading, pitch, roll = self.axis_sensor.euler
+
+            self.heading = heading
+            self.pitch = pitch
+            self.roll = roll
 
         self.changed.emit()
