@@ -20,8 +20,13 @@ class AHRS(QObject):
             import busio
             from adafruit_bmp280 import Adafruit_BMP280_I2C
             from adafruit_bno055 import BNO055_I2C, CONFIG_MODE, NDOF_MODE
+
             i2c = busio.I2C(board.SCL, board.SDA)
             self.axis_sensor = BNO055_I2C(i2c)
+            self.axis_sensor.mode = CONFIG_MODE
+            self.axis_sensor._write_register(0x42, 0b00000110)
+            self.axis_sensor.mode = NDOF_MODE
+
         except NotImplementedError:
             self.simulated = True
 
@@ -44,10 +49,15 @@ class AHRS(QObject):
 
             self.slip = math.cos(time_elapsed) * 1
         else:
-            heading, pitch, roll = self.axis_sensor.euler
+            roll, pitch, heading = self.axis_sensor.euler
 
-            self.heading = heading
-            self.pitch = pitch
-            self.roll = roll
+            if heading != None:
+                self.heading = heading
+
+            if pitch != None:
+                self.pitch = pitch
+
+            if roll != None:
+                self.roll = roll
 
         self.changed.emit()
