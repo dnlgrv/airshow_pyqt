@@ -49,7 +49,7 @@ class AHRS(QObject):
 
             self.slip = math.cos(time_elapsed) * 1
         else:
-            roll, pitch, heading = self.axis_sensor.euler
+            heading, roll, pitch = self.axis_sensor.euler
 
             if heading != None:
                 self.heading = heading
