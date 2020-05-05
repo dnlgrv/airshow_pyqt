@@ -1,126 +1,58 @@
 import smbus2
 import RPi.GPIO as GPIO
 from time import sleep
-import i2cNavKeyLib
+import i2cEncoderLibV2
 
 
-def Up_Button():
-    print ('Button Up Pushed!')
-    navkey.writeGP1(100)
-    navkey.writeGP1(0)
-
-    
-def Down_Button():
-    print ('Button Down Pushed!')
-    navkey.writeGP1(100)
-    navkey.writeGP1(0)
-
-    
-def Left_Button():
-    print ('Button Left Pushed!')
-    navkey.writeGP1(100)
-    navkey.writeGP1(0)
-
-    
-def Right_Button():
-    print ('Button Right Pushed!')
-    navkey.writeGP1(100)
-    navkey.writeGP1(0)
-
-    
-def Push_Button():
-    print ('Central Pushed!')
-    navkey.writeGP1(100)
-    navkey.writeGP1(0)
-
-    
-def DoublePush_Button():
-    print ('Central Double Pushed!')
-    navkey.writeGP1(100)
-    navkey.writeGP1(0)
-
-    
 def EncoderChange():
-    print ('Ring Changed: %d' % (navkey.readCounter32()))
-    navkey.writeGP2(100)
-    navkey.writeGP2(0)
+    print ('Changed: %d' % (encoder.readCounter32()))
 
-    
+def EncoderPush():
+    print ('Encoder Pushed!')
+
+def EncoderDoublePush():
+    print ('Encoder Double Push!')
+
 def EncoderMax():
-    print ('Ring max!')
-    navkey.writeGP3(100)
-    navkey.writeGP3(0)
+    print ('Encoder max!')
 
-    
 def EncoderMin():
-    print ('Ring min!')
-    navkey.writeGP3(100)
-    navkey.writeGP3(0)
+    print ('Encoder min!')
 
-    
-def NavKey_INT():
-    navkey.updateStatus()
+def Encoder_INT(self):
+    encoder.updateStatus()
 
 
 GPIO.setmode(GPIO.BCM)
-bus = smbus2.SMBus(3)
-INT_pin = 27
+bus = smbus2.SMBus(1)
+INT_pin = 4
 GPIO.setup(INT_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-navkey = i2cNavKeyLib.i2cNavKeyLib(bus, 0x10) # Write here the I2C address of the NavKey #
+encoder = i2cEncoderLibV2.i2cEncoderLibV2(bus, 0x20)
 
-encconfig = (i2cNavKeyLib.INT_DATA | i2cNavKeyLib.WRAP_ENABLE | i2cNavKeyLib.DIRE_RIGHT | i2cNavKeyLib.IPUP_ENABLE)
-navkey.begin(encconfig)
+encconfig = (i2cEncoderLibV2.INT_DATA | i2cEncoderLibV2.WRAP_ENABLE | i2cEncoderLibV2.DIRE_RIGHT | i2cEncoderLibV2.IPUP_ENABLE | i2cEncoderLibV2.RMOD_X1)
+encoder.begin(encconfig)
 
-navkey.writeCounter(0)
-navkey.writeMax(35)
-navkey.writeMin(-20)
-navkey.writeStep(1)
-navkey.writeDoublePushPeriod(50)
+encoder.writeCounter(0)
+encoder.writeMax(35)
+encoder.writeMin(-20)
+encoder.writeStep(1)
+encoder.writeAntibouncingPeriod(8)
+encoder.writeDoublePushPeriod(50)
 
-navkey.writeGP1conf(i2cNavKeyLib.GP_PWM)
-navkey.writeGP2conf(i2cNavKeyLib.GP_PWM)
-navkey.writeGP3conf(i2cNavKeyLib.GP_PWM)
+encoder.onChange = EncoderChange
+encoder.onButtonPush = EncoderPush
+encoder.onButtonDoublePush = EncoderDoublePush
+encoder.onMax = EncoderMax
+encoder.onMin = EncoderMin
 
-navkey.writeGammaGP1(i2cNavKeyLib.GAMMA_2)
-navkey.writeGammaGP2(i2cNavKeyLib.GAMMA_2)
-navkey.writeGammaGP3(i2cNavKeyLib.GAMMA_2)
+encoder.autoconfigInterrupt()
+print ('Board ID code: 0x%X' % (encoder.readIDCode()))
+print ('Board Version: 0x%X' % (encoder.readVersion()))
 
-navkey.onUpPush = Up_Button
-navkey.onDownPush = Down_Button
-navkey.onLeftPush = Left_Button
-navkey.onRightPush = Right_Button
-navkey.onCentralPush = Push_Button
-navkey.onCentralDoublePush = DoublePush_Button
-navkey.onChange = EncoderChange
-navkey.onMax = EncoderMax
-navkey.onMin = EncoderMin
-
-navkey.autoconfigInterrupt()
-print ('Board ID code: 0x%X' % (navkey.readIDCode()))
-print ('Board Version: 0x%X' % (navkey.readVersion()))
-
-navkey.writeGP1(100)
-navkey.writeGP2(0)
-navkey.writeGP3(0)
-sleep(0.3)
-navkey.writeGP1(0)
-navkey.writeGP2(100)
-navkey.writeGP3(0)
-sleep(0.3)
-navkey.writeGP1(0)
-navkey.writeGP2(0)
-navkey.writeGP3(100)
-sleep(0.3)
-navkey.writeGP1(0)
-navkey.writeGP2(0)
-navkey.writeGP3(0)
-
-
-GPIO.add_event_detect(INT_pin, GPIO.FALLING, callback=NavKey_INT)
+GPIO.add_event_detect(INT_pin, GPIO.FALLING, callback=Encoder_INT, bouncetime=10)
 
 while True:
-    if GPIO.input(INT_pin) == False: #
-        NavKey_INT()
-
+  #  if GPIO.input(INT_pin) == False: #
+   #     Encoder_INT() #
     pass
