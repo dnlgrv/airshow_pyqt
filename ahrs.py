@@ -34,7 +34,7 @@ class AHRS(QObject):
         self.start_time = time.time()
 
         self.timer = QTimer()
-        self.timer.setInterval(10)
+        self.timer.setInterval(50)
         self.timer.timeout.connect(self._timeout)
         self.timer.start()
 
